@@ -18,6 +18,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/artists', 'ArtistController@store');
     Route::get('/dvds/search', 'DvdController@search');
     Route::get('/dvds', 'DvdController@results');
+    Route::get('/dvds/{id}', 'DvdController@info');
+    Route::post('/dvds/review', 'DvdController@review');
 });
 
 

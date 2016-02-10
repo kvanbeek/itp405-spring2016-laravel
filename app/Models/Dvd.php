@@ -14,7 +14,7 @@ class Dvd
 {
     public function __construct(array $data)
     {
-        $this->artist_name = $data['title'];
+        $this->title = $data['title'];
     }
 
     public function save()
@@ -23,6 +23,8 @@ class Dvd
             'title' => $this->title
         ]);
     }
+
+
 
     public static function all()
     {

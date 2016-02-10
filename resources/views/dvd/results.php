@@ -25,6 +25,7 @@
             <th>Label</th>
             <th>Sound</th>
             <th>Format</th>
+            <th>Review</th>
         </tr>
 
         <?php foreach ($dvds as $my_dvd) : ?>
@@ -37,6 +38,8 @@
             <?php echo "<td>" .  $my_dvd->label_name . "</td>" ?>
             <?php echo "<td>" .  $my_dvd->sound_name . "</td>" ?>
             <?php echo "<td>" .  $my_dvd->format_name . "</td>" ?>
+
+            <?php echo '<td><a href=' . 'dvds/' . $my_dvd->id . '>Review</a>' . "</td>" ?>
 
 
             <?php echo "</tr>" ?>

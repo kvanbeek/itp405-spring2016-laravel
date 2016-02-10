@@ -39,6 +39,70 @@ class DvdController extends Controller
 //        ]);
     }
 
+    public function info($id)
+    {
+
+        $query = DB::table('dvds')
+            ->select('dvds.id', 'title', 'rating_name', 'genre_name', 'label_name', 'sound_name', 'format_name')
+            ->leftJoin('ratings', 'dvds.rating_id', '=', 'ratings.id')
+            ->leftJoin('genres', 'dvds.genre_id', '=', 'genres.id')
+            ->leftJoin('labels', 'dvds.label_id', '=', 'labels.id')
+            ->leftJoin('sounds', 'dvds.sound_id', '=', 'sounds.id')
+            ->leftJoin('formats', 'dvds.format_id', '=', 'formats.id');
+
+        $dvd = $query->where('dvds.id', $id)->first();
+
+
+        $reviews_query = DB::table('reviews')
+            ->select('rating', 'title', 'description')
+            ->where('dvd_id', $id);
+
+        $reviews = $reviews_query->get();
+
+
+        return view('dvd.info', [
+            'dvd' => $dvd,
+            'reviews' => $reviews
+        ]);
+    }
+
+    public function review(Request $request)
+    {
+
+        $validation = Validator::make($request->all(), [
+            'rating' => 'numeric|max:10|min:0',
+            'title' => 'required|string|min:5',
+            'description' => 'required|string|min:10',
+            'dvd_id' => 'required|integer'
+        ]);
+
+
+        $id = $request->input('dvd_id');
+
+
+        if ($validation->fails()) {
+            return redirect("dvds/$id")
+                ->withInput()
+                ->withErrors($validation);
+        }
+
+        DB::table('reviews')->insert([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'dvd_id' => $request->input('dvd_id'),
+            'rating' => $request->input('rating')
+        ]);
+
+        return redirect("dvds/$id")->with('success', true);
+
+
+//        rating, numeric value from 1-10
+//        title, required with at least 5 characters
+//        description, required with at least 10 characters
+//        dvd_id, required integer
+
+    }
+
     public function results(Request $request)
     {
         $searchTerm = $request->input('dvd');
@@ -49,7 +113,7 @@ class DvdController extends Controller
 
 
         $query = DB::table('dvds')
-            ->select('title', 'rating_name', 'genre_name', 'label_name', 'sound_name', 'format_name')
+            ->select('dvds.id', 'title', 'rating_name', 'genre_name', 'label_name', 'sound_name', 'format_name')
             ->leftJoin('ratings', 'dvds.rating_id', '=', 'ratings.id')
             ->leftJoin('genres', 'dvds.genre_id', '=', 'genres.id')
             ->leftJoin('labels', 'dvds.label_id', '=', 'labels.id')
@@ -71,6 +135,11 @@ class DvdController extends Controller
         }
 
         $dvds = $query->get();
+
+
+
+
+
 
 
 
