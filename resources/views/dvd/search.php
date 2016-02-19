@@ -8,7 +8,13 @@
 <body>
 
 
-
+<div class="col-sm-3 col-md-2 sidebar">
+    <ul class="nav nav-sidebar">
+        <?php foreach ($genres as $genre) : ?>
+            <li><a href="/genres/<?php echo $genre->id ?>/dvds"><?php echo $genre->genre_name ?></a></li>
+        <?php endforeach; ?>
+    </ul>
+</div>
 
 
 <div class="container">

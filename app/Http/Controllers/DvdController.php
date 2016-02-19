@@ -9,34 +9,93 @@ use App\Http\Controllers\Controller;
 use DB;
 use Validator;
 use App\Models\Dvd;
+use App\Models\Genre;
+use App\Models\Rating;
+use App\Models\Label;
+use App\Models\Sound;
+use App\Models\Format;
+
+
 
 class DvdController extends Controller
 {
     //
+    public function create()
+    {
+
+
+        $genres = Genre::all();
+        $ratings = Rating::all();
+        $labels = Label::all();
+        $sounds = Sound::all();
+        $formats = Format::all();
+
+
+        return view('dvd.createdvd', [
+            'genres' => $genres,
+            'ratings' => $ratings,
+            'labels' => $labels,
+            'sounds' => $sounds,
+            'formats' => $formats
+        ]);
+
+
+    }
+
+    public function store(Request $request)
+    {
+        $dvd = new Dvd;
+
+        $dvd->title = $request->title;
+        $dvd->genre_id = $request->genre;
+        $dvd->rating_id = $request->rating;
+        $dvd->label_id = $request->label;
+        $dvd->sound_id = $request->sound;
+        $dvd->format_id = $request->formatId;
+
+        $dvd->save();
+
+        return redirect("create")->with('success', true);
+
+    }
+
+    public function genres($id)
+    {
+
+
+        $genre = Genre::find($id);
+
+
+        $dvds = Dvd::with('genre', 'rating', 'label')
+            ->where('genre_id', $id)
+            ->get();
+
+
+        return view('dvd.genres', [
+            'dvds' => $dvds,
+            'genre' => $genre
+        ]);
+
+
+    }
+
     public function search()
     {
-//        $artists = DB::table('artists')
-//            ->orderBy('artist_name')
-//            ->get();
 
-        $genres = DB::table('genres')
-            ->select('id', 'genre_name')
-            ->get();
+
+        $genres = Genre::all();
 
         $ratings = DB::table('ratings')
             ->select('id', 'rating_name')
             ->get();
 
 
-        return view('dvd.create', [
+        return view('dvd.search', [
             'genres' => $genres,
             'ratings' => $ratings
         ]);
 
-//        $dvds = Dvd::all();
-//        return view('dvd.create', [
-//            'dvds' => $dvds
-//        ]);
+
     }
 
     public function info($id)
@@ -151,4 +210,6 @@ class DvdController extends Controller
         ]);
 
     }
+
+
 }

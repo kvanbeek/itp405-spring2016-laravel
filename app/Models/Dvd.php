@@ -2,34 +2,28 @@
 
 namespace App\Models;
 
-use DB;
+use Illuminate\Database\Eloquent\Model;
 
-/**
- * Created by PhpStorm.
- * User: davidtang
- * Date: 2/1/16
- * Time: 10:18 PM
- */
-class Dvd
+class Dvd extends Model
 {
-    public function __construct(array $data)
-    {
-        $this->title = $data['title'];
+    //
+    public function format(){
+        return $this->belongsTo('App\Models\Format');
     }
 
-    public function save()
-    {
-        DB::table('dvds')->insert([
-            'title' => $this->title
-        ]);
+    public function genre(){
+        return $this->belongsTo('App\Models\Genre');
     }
 
+    public function label(){
+        return $this->belongsTo('App\Models\Label');
+    }
 
+    public function rating(){
+        return $this->belongsTo('App\Models\Rating');
+    }
 
-    public static function all()
-    {
-        return DB::table('dvds')
-            ->orderBy('title')
-            ->get();
+    public function sound(){
+        return $this->belongsTo('App\Models\Sound');
     }
 }
