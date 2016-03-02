@@ -11,6 +11,21 @@
 |
 */
 
+
+Route::group([ 'prefix' => 'api/v1', 'namespace' => 'API' ], function() {
+    // GET api/v1/genres
+    Route::get('genres', 'DvdController@genres');
+    Route::get('genres/{id}', 'DvdController@genreId');
+
+    // GET api/v1/dvds
+    Route::get('dvds', 'DvdController@results');
+    Route::get('dvds/{id}', 'DvdController@dvdId');
+
+    // POST api/v1/dvds
+    Route::post('dvds', 'DvdController@store');
+
+});
+
 Route::group(['middleware' => ['web']], function () {
     Route::get('/search', 'MusicController@search');
     Route::get('/results', 'MusicController@results');
