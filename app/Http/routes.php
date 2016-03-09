@@ -10,7 +10,7 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
+use App\Services\API\iTunes;
 
 Route::group([ 'prefix' => 'api/v1', 'namespace' => 'API' ], function() {
     // GET api/v1/genres
@@ -23,6 +23,21 @@ Route::group([ 'prefix' => 'api/v1', 'namespace' => 'API' ], function() {
 
     // POST api/v1/dvds
     Route::post('dvds', 'DvdController@store');
+
+});
+
+Route::get('/itunes/{artist}', function($artist){
+    $itunes = new iTunes();
+    $artistResults = $itunes->getArtist("https://itunes.apple.com/search?term=$artist");
+//    var_dump($artistResults);
+
+//
+//
+    return view('itunes', [
+        "artists" => $artistResults->results
+    ]);
+
+
 
 });
 
