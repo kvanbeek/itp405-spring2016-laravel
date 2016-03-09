@@ -7,11 +7,11 @@ class iTunes {
     public function getArtist($artistUrl)
     {
         if (Cache::get($artistUrl)) {
+          echo "running get from cache";
             $artist = Cache::get($artistUrl);
         } else {
             $artist = $this->artistUrl($artistUrl);
             Cache::put($artistUrl, $artist, 30);
-            return $artist;
         }
 
 
